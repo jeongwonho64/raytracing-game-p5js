@@ -135,6 +135,37 @@ function draw() {
     scoreShower.display(timer)
   }
   
+  if (screen == 'intro') {
+    button.hide()
+    background('beige')
+    push()
+    textAlign(CENTER)
+    fill('navy')
+    stroke('lightblue')
+    strokeWeight(windowWidth/160)
+    textSize(windowWidth/10)
+    text('Lumination Control', windowWidth/2, windowWidth/5)
+    
+    if (mouseX > windowWidth*33/80 && mouseX < windowWidth*47/80 && mouseY > (windowHeight*59/80 - windowWidth/20) && mouseY < (windowHeight*59/80 + windowWidth/20)) {
+      fills = ['navy', 'beige', 'lightblue']
+    } else {
+      fills = ['lightblue', 'navy', 'navy']
+    }
+    
+    fill(fills[0])
+    stroke(fills[1])
+    strokeWeight(windowWidth/160)
+    rectMode(CENTER)
+    rect(windowWidth/2, windowHeight*3/4 - windowHeight*1/80, windowWidth*7/40, windowWidth/10)
+    
+    fill(fills[2])
+    noStroke()
+    textSize(windowWidth/20)
+    text('Start', windowWidth/2, windowHeight*3/4)
+    
+    pop()
+  }
+
   for (let scores of score) {
     if (scores == 10) {
       screen = 'game over'
