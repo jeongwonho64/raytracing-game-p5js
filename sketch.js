@@ -57,7 +57,6 @@ function setup() {
 function draw() {
     background(0);
     mapper.mapping(walls)
-
   if (screen == 'game') {
     for (let wall of walls) {
         wall.show();
@@ -144,7 +143,7 @@ function draw() {
     stroke('lightblue')
     strokeWeight(windowWidth/160)
     textSize(windowWidth/10)
-    text('Lumination Control', windowWidth/2, windowWidth/5)
+    text('Raytracing', windowWidth/2, windowWidth/5)
     
     if (mouseX > windowWidth*33/80 && mouseX < windowWidth*47/80 && mouseY > (windowHeight*59/80 - windowWidth/20) && mouseY < (windowHeight*59/80 + windowWidth/20)) {
       fills = ['navy', 'beige', 'lightblue']
@@ -162,10 +161,131 @@ function draw() {
     noStroke()
     textSize(windowWidth/20)
     text('Start', windowWidth/2, windowHeight*3/4)
+    pop()
+  } else if (screen == 'instructions') {
+    background('lightblue')
+    push()
+    fill('navy')
+    textSize(windowHeight/40)
+    textAlign(CENTER)
+    noStroke()
+    text('This is game sponsored by RayCasting TM', windowWidth/2, windowHeight*3/80)
+    textSize(windowHeight/20)
+    text('Use the arrow keys to move the red particle (1P)', windowWidth/2, windowHeight*7/80)
+    text('Use the WASD keys to move the blue particle (2P)', windowWidth/2, windowHeight*12/80)
+    text('Each player radiates out light', windowWidth/2, windowHeight*17/80)
+    text('There are hidden walls in the map', windowWidth/2, windowHeight*22/80)
+    text('Shine on a bigger area than your opponent to win points', windowWidth/2, windowHeight*27/80)
+    text('After a point is won, click the screen to reset from the win screen', windowWidth/2, windowHeight*32/80)
+    text('You can change the map at your own risk', windowWidth/2, windowHeight*37/80)
+    text('First to 10 wins', windowWidth/2, windowHeight*42/80)
+    
+    if (mouseX > windowWidth*33/80 && mouseX < windowWidth*47/80 && mouseY > (windowHeight*59/80 - windowWidth/20) && mouseY < (windowHeight*59/80 + windowWidth/20)) {
+      fills = ['navy', 'lightblue', 'beige']
+    } else {
+      fills = ['beige', 'navy', 'navy']
+    }
+    
+    fill(fills[0])
+    stroke(fills[1])
+    strokeWeight(windowWidth/160)
+    rectMode(CENTER)
+    rect(windowWidth/2, windowHeight*3/4 - windowHeight*1/80, windowWidth*7/40, windowWidth/10)
+    
+    fill(fills[2])
+    noStroke()
+    textSize(windowWidth/20)
+    text('Ok! ;)', windowWidth/2, windowHeight*3/4)
+    pop()
+  } else if (screen == 'game over') {
+    
+    fills = ['lightblue', 'beige', 'navy']
+    button.hide()
+    push()
+    background('gray')
+    textSize(windowHeight/8)
+    if (score[0] > score[1]) {
+      stroke('red')
+    } else {
+      stroke('blue')
+    }
+    textAlign(CENTER)
+    strokeWeight(windowHeight/160)
+    fill('beige')
+    text('GAME OVER!!', windowWidth/2, windowHeight/8)
+    noStroke()
+    textSize(windowHeight/20)
+    if (abs(score[0] - score[1]) > 2) {
+      text('In a rapid and dominant fashion,', windowWidth/2, windowHeight*9/40)
+    } else {
+      text('After much trial and tribulation,', windowWidth/2, windowHeight*9/40)
+    }
+    
+    strokeWeight(windowHeight/320)
+    stroke('beige')
+    if (score[0] - score[1] > 0) {
+      endFill[2] = 'red'
+      fill('blue')
+      text('Blue has emerged with a score of ' + score[1], windowWidth/2, windowHeight*12/40)
+      fill('red')
+      text('Red has emerged with a score of ' + score[0], windowWidth/2, windowHeight*15/40)
+      
+      noStroke()
+      fill('beige')
+      text('Hence, Red has emerged VICTORIOUS!!', windowWidth/2, windowHeight*18/40)
+    } else {
+      endFill[2] = 'blue'
+      fill('blue')
+      text('Blue has emerged with a score of ' + score[1], windowWidth/2, windowHeight*15/40)
+      fill('red')
+      text('Red has emerged with a score of ' + score[0], windowWidth/2, windowHeight*12/40)
+      
+      noStroke()
+      fill('beige')
+      text('Hence, Blue has emerged VICTORIOUS!!', windowWidth/2, windowHeight*18/40)
+    }
+    rectMode(CENTER)
+    strokeWeight(windowWidth/160)
+    
+    if (mouseX > windowWidth/8 && mouseX < windowWidth*3/8 && mouseY > windowHeight*7/10 && mouseY < windowHeight*31/40) {
+      fills = ['navy', 'lightblue', 'beige']
+    } else {
+      fills = ['lightblue', 'beige', 'navy']
+    }
+    
+    if (mouseX > windowWidth*5/8 && mouseX < windowWidth*7/8 && mouseY > windowHeight*7/10 && mouseY < windowHeight*31/40) {
+      if (score[0] > score[1]) {
+        endFill = ['silver', 'beige', 'blue']
+      } else {
+        endFill = ['silver', 'beige', 'red']
+      }
+    } else {
+      if (score[0] > score[1]) {
+        endFill = ['beige', 'silver', 'red']
+      } else {
+        endFill = ['beige', 'silver', 'blue']
+      }
+    }
+    
+    fill(fills[0])
+    stroke(fills[1])
+    rect(windowWidth/4, windowHeight*3/4 - windowHeight/80, windowWidth/4, windowHeight*3/40)
+    
+    fill(endFill[0])
+    stroke(endFill[1])
+    rect(windowWidth*3/4, windowHeight*3/4 - windowHeight/80, windowWidth/4, windowHeight*3/40)
+    
+    noStroke()
+    
+    fill(fills[2])
+    text('Play Again', windowWidth/4, windowHeight*3/4)
+    
+    fill(endFill[2])
+    text('Restart', windowWidth*3/4, windowHeight*3/4)
     
     pop()
   }
-
+  
   for (let scores of score) {
     if (scores == 10) {
       screen = 'game over'
