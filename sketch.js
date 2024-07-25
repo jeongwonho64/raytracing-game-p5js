@@ -1,3 +1,7 @@
+//work in progress: start screen, instructions screen, game module managing, game over screen (score cap)
+
+//mechanic works for sure, debugged completely
+
 let ray;
 let walls = [];
 let players = [];
@@ -14,8 +18,14 @@ let endFill = ['beige', 'silver', 'blue']
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
+  
     mapper = new Map(0)
     scoreShower = new scoreBox()
+    
+  
+    
+
+    // Example walls
     walls.push(new Wall(windowWidth*5/40, 0, windowWidth*5/40, windowWidth*4/40));
     walls.push(new Wall(0, windowWidth*4/40, windowWidth*5/40, windowWidth*4/40));
   
@@ -33,6 +43,7 @@ function setup() {
   
   
   button.mousePressed(() => {
+    //print('yes')
     if (mapper.mode == 0) {
       mapper.changeMap(random([1, 2]))
       walls = []
@@ -57,13 +68,19 @@ function setup() {
 function draw() {
     background(0);
     mapper.mapping(walls)
+    
+    //print(mapper.mode)
+  
+
+    // Display walls
   if (screen == 'game') {
     for (let wall of walls) {
         wall.show();
     }
 
     for (let player of players) {
-      player.show(walls);
+      // Display rays
+      player.show(walls); // Pass the walls array to the show method
 
       player.move()
 
@@ -75,6 +92,8 @@ function draw() {
   }
   
   
+  
+  //print(timer)
   if (screen == 'game') {
     timer++
     button.show()
@@ -84,13 +103,20 @@ function draw() {
     let total = width * height;
 
     loadPixels();
+
+    // Refer to https://p5js.org/reference/#/p5/pixels
+    // Some displays will draw multiple pixels per "small square" of graph paper. The total number of pixels used per square can be calculated using pixelDensity()
     let pixelsPerSquare = pixelDensity() * pixelDensity();
 
+    // Find the number of squares that are white in colour. To do so, we find groups of 4 consecutive values in the array that equal 255 (i.e. RGBA is all 255), then divide the total number of groups by pixel density
+    // We cannot directly filter the array to include items that equal 255, because alpha values for other coloured pixels will also equal 255.
     let redSquaresCount = 0;
     let blueSquaresCount = 0
 
     for (let i = 3; i <= pixels.length; i += 4) {
       if (
+        
+        //read backwards [o, b, g, r]
         pixels[i] == 255 &&
         pixels[i - 1] == 0 &&
         pixels[i - 2] == 0 &&
@@ -102,6 +128,8 @@ function draw() {
     
     for (let i = 3; i <= pixels.length; i += 4) {
       if (
+        
+        //read backwards [o, b, g, r]
         pixels[i] == 255 &&
         pixels[i - 1] == 255 &&
         pixels[i - 2] == 0 &&
@@ -110,6 +138,9 @@ function draw() {
         blueSquaresCount += 1;
       }
     }
+    
+    //print(blueSquaresCount + ' red: ' + redSquaresCount)
+    
     if (redSquaresCount > blueSquaresCount) {
       background('red')
       score[0]++
@@ -120,8 +151,10 @@ function draw() {
       scored = 'blue'
     }
     
+    
     done = true
 
+   
   } else if (timer >= 200) {
     if (scored == 'blue') {
       background('blue')
@@ -133,6 +166,7 @@ function draw() {
   if (screen == 'game') {
     scoreShower.display(timer)
   }
+  
   
   if (screen == 'intro') {
     button.hide()
@@ -161,6 +195,7 @@ function draw() {
     noStroke()
     textSize(windowWidth/20)
     text('Start', windowWidth/2, windowHeight*3/4)
+    
     pop()
   } else if (screen == 'instructions') {
     background('lightblue')
@@ -315,3 +350,4 @@ function mouseClicked() {
     scored = 'null'
   }
 }
+

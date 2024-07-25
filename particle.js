@@ -5,7 +5,7 @@ class Particle {
       this.mover = z;
       this.rad = windowWidth / 60
     }
-  
+    // Generate rays for the field of view
     lookAt(walls) {
       const rays = [];
       for (let a = 0; a <= 360; a += 10) {
